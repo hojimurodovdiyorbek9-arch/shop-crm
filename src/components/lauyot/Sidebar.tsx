@@ -1,5 +1,6 @@
 import {
   CirclePlus,
+  CircleUserRound,
   House,
   LayoutGrid,
   LogOut,
@@ -165,6 +166,27 @@ export default function Sidebar() {
                 </>
               )}
             </NavLink>
+            <NavLink
+              to="profile"
+              className={({ isActive }) =>
+                `rounded-md flex items-center gap-2 px-4 py-2.25 transition-all duration-300
+                ${
+                  isActive
+                    ? "bg-[#4EA674] text-white"
+                    : "text-[#6A717F] hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <CircleUserRound
+                    color={isActive ? "white" : "#6A717F"}
+                    size={20}
+                  />
+                  {!sidebar && <p>Admin role</p>}
+                </>
+              )}
+            </NavLink>
           </div>
         </div>
       </div>
@@ -187,7 +209,9 @@ export default function Sidebar() {
           )}
         </div>
 
-        <LogOut className="text-[#6A717F] hover:text-red-500 cursor-pointer" />
+        <NavLink to="/login">
+          <LogOut className="text-[#6A717F] hover:text-red-500 cursor-pointer" />
+        </NavLink>
       </div>
     </div>
   );

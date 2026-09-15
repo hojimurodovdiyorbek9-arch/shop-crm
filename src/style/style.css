@@ -18,3 +18,54 @@ body{
   background-color: #eaf8e7 !important;
   color: #023337 !important;
 }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.ant-input::placeholder {
+  color: #d1d5db !important;
+}
+
+.ant-input-password input::placeholder {
+  color: #d1d5db !important;
+}
+@keyframes loginEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-30px);
+  }
+
+  75% {
+    transform: translateY(15px);
+  }
+
+  90% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.login-animation {
+  animation: loginEnter 1.2s ease-out;
+}
+.lamp{
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+.lamp-b{
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+.shape-1{
+  border-radius:  50% 50% 0 0 /  100% 100% 0 0;
+}

@@ -7,29 +7,29 @@ import {
   EllipsisVertical,
   ListFilter,
 } from "lucide-react";
-import { Table, Tag } from "antd";
-import type { DataType } from "../types/TableType";
+import { Segmented, Table, Tag } from "antd";
+
 import ProductTable from "../compponet/ProductTable";
 
 export default function OrderManagment() {
-  const data: DataType[] = [
-    {
-      key: "1",
-      no: 1,
-      orderId: "#ORD-001",
-      product: "Apple iPhone 13",
-      image: "/iphone13.png",
-      date: "Sep 09, 2026",
-      price: 999,
-      payment: "Credit Card",
-      status: "Completed",
-    },
-  ];
+  // const data: DataType[] = [
+  //   {
+  //     key: "1",
+  //     no: 1,
+  //     orderId: "#ORD-001",
+  //     product: "Apple iPhone 13",
+  //     image: "/iphone13.png",
+  //     date: "Sep 09, 2026",
+  //     price: 999,
+  //     payment: "Credit Card",
+  //     status: "Completed",
+  //   },
+  // ];
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-start items-center mb-4">
         <p className="text-[20px] font-bold">Order List</p>
-        <div className="flex gap-4 items-center">
+        {/* <div className="flex gap-4 items-center">
           <div>
             <button className="bg-[#4EA674] flex items-center cursor-pointer gap-2 text-[15px] font-bold text-white py-2 px-4 rounded">
               <CirclePlus size={20} />
@@ -40,9 +40,9 @@ export default function OrderManagment() {
             <p>More Action</p>
             <EllipsisVertical size={20} />
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className=" bg-white p-4 shadow rounded-[8px]">
           <div className="flex justify-between items-start mb-4">
             <div>
@@ -123,10 +123,10 @@ export default function OrderManagment() {
             <p className="text-gray-500 text-[14px]">Last 7 days</p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="bg-[#FFFFFF] p-4 shadow rounded-[8px] mt-4">
         <div className="flex justify-between items-center ">
-          <div className="flex bg-[#EAF8E7] items-center p-[4px] rounded-[8px] gap-2 ">
+          {/* <div className="flex bg-[#EAF8E7] items-center p-[4px] rounded-[8px] gap-2 ">
             <div className="py-[6px] px-[12px] cursor-pointer rounded-[8px] text-[15px] font-medium bg-[#FFFFFF]">
               All order{" "}
               <span className="text-[14px] text-[#4EA674]">(240)</span>
@@ -140,10 +140,27 @@ export default function OrderManagment() {
             <div className="py-[6px] px-[12px] cursor-pointer rounded-[8px] text-[15px] font-medium ">
               Canceled{" "}
             </div>
+          </div> */}
+          <div className="flex items-center">
+            <Segmented<string>
+              options={["All order", "Completed", "Pending", "Canceled"]}
+              className="
+    !h-10
+    !p-1
+    [&_.ant-segmented-group]:!h-full
+    [&_.ant-segmented-item]:!h-full
+    [&_.ant-segmented-item]:!flex
+    [&_.ant-segmented-item]:!items-center
+    [&_.ant-segmented-item]:!justify-center
+  "
+              onChange={(value) => {
+                console.log(value);
+              }}
+            />
           </div>
           <div className="flex gap-2 items-center   py-2 px-4 ">
             <div>
-              <Search />
+              <Search placeholder="Search order" />
             </div>
             <div className="flex gap-2 items-center cursor-pointer bg-[#FFFFFF] border border-[#E5E7EB] py-2 px-3 rounded">
               <ListFilter size={18} />
