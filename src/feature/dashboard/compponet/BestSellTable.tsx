@@ -4,9 +4,14 @@ import type { ColumnsType } from "antd/es/table";
 import type { ProductType } from "../types/ProductType";
 import { useIsDark } from "../../hook/UseIsDark";
 import foto from "../../../assets/img/iphone.png";
+import DashboardService from "../service/DashboardService";
 
 const BestSellTable = () => {
   const darkMode = useIsDark();
+  // const { bestSellingProduct } = DashboardService();
+
+  // const { data: bestSell,isPending } = bestSellingProduct();
+ 
 
   const { Search } = Input;
 

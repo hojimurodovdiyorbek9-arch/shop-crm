@@ -15,6 +15,7 @@ import {
   Form,
   Input,
   Modal,
+  Skeleton,
   Upload,
   message,
 } from "antd";
@@ -44,10 +45,94 @@ export default function Profile() {
   // Loading
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-[400px]">
-        <p className={darkMode ? "text-gray-400" : "text-gray-500"}>
-          Loading...
-        </p>
+      <div className={darkMode ? "p-6 bg-[#111827] min-h-screen" : "p-6"}>
+        <div className="mb-6 flex items-center justify-between">
+          <div className="w-[300px]">
+            <Skeleton.Input active size="large" style={{ width: 180 }} />
+            <div className="mt-2">
+              <Skeleton.Input active size="small" style={{ width: 250 }} />
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Skeleton.Button active size="large" />
+            <Skeleton.Button active size="large" />
+          </div>
+        </div>
+
+        <div
+          className={
+            darkMode
+              ? "bg-[#1F2937] rounded-2xl border border-[#374151] overflow-hidden"
+              : "bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden"
+          }
+        >
+          <Skeleton.Node
+            active
+            style={{
+              width: "100%",
+              height: 140,
+              borderRadius: 0,
+            }}
+          />
+
+          <div className="px-6 pb-6">
+            <div className="-mt-12">
+              <Skeleton.Avatar active size={96} />
+            </div>
+
+            <div className="mt-4">
+              <Skeleton.Input active size="large" style={{ width: 220 }} />
+              <div className="mt-2">
+                <Skeleton.Input active size="small" style={{ width: 100 }} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+
+              <Skeleton.Input
+                active
+                block
+                size="large"
+                style={{ height: 76 }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

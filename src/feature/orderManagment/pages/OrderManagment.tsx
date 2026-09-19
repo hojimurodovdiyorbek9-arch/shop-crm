@@ -1,13 +1,17 @@
-import Search from "antd/es/input/Search";
+import Search, { type SearchProps } from "antd/es/input/Search";
 import { ArrowDownUp, EllipsisVertical, ListFilter } from "lucide-react";
 import { ConfigProvider, Segmented } from "antd";
 
 import ProductTable from "../compponet/ProductTable";
 import { useIsDark } from "../../hook/UseIsDark";
+import { useState } from "react";
 
 export default function OrderManagment() {
   const isDark = useIsDark();
-
+  const [searchValue, setSearchValue] = useState("");
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    setSearchValue(value);
+  };
   return (
     <ConfigProvider
       theme={{
@@ -43,7 +47,6 @@ export default function OrderManagment() {
             itemColor: isDark ? "#D1D5DB" : "#374151",
             itemHoverColor: isDark ? "#FFFFFF" : "#111827",
             itemSelectedColor: "#FFFFFF",
-           
 
             trackBg: isDark ? "#374151" : "#F3F4F6",
             itemSelectedBg: "#4EA674",
@@ -90,7 +93,7 @@ export default function OrderManagment() {
             <div className="flex items-center">
               <Segmented<string>
                 options={["All order", "Completed", "Pending", "Canceled"]}
-                className="!h-10 !p-1"
+                className="!h-10 !p-1.5"
                 onChange={(value) => {
                   console.log(value);
                 }}
@@ -98,15 +101,26 @@ export default function OrderManagment() {
             </div>
 
             {/* Search + buttons */}
-            <div className="flex gap-2 items-center py-2 px-4">
+            <div className="flex gap-2 items-center  ">
               {/* Search */}
-              <Search
+              {/* <Search
                 placeholder="Search order"
                 allowClear
                 size="large"
                 style={{
                   width: 240,
                 }}
+              /> */}
+              <Search
+                placeholder="Search..."
+                allowClear
+                size="large"
+                className="order-search"
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+                onSearch={onSearch}
               />
 
               {/* Filter */}
@@ -188,7 +202,7 @@ export default function OrderManagment() {
 
           {/* Table */}
           <div className="mt-8">
-            <ProductTable />
+            <ProductTable searchValue={searchValue} />
           </div>
         </div>
       </div>

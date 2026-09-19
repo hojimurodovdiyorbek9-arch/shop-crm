@@ -16,6 +16,7 @@ export default function Header() {
     "/customer": "Customers",
     "/products": "Products",
     "/categories": "Categories",
+    "/brands": "Brands",
   };
 
   const pageTitle = pageTitles[location.pathname] || "Dashboard";

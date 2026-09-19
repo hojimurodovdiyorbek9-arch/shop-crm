@@ -7,7 +7,7 @@ import {
 
 import { useState } from "react";
 import { ConfigProvider, Segmented } from "antd";
-import Search from "antd/es/input/Search";
+import Search, { type SearchProps } from "antd/es/input/Search";
 
 import CategoriesTable from "../compponet/CategoriesTable";
 import CategoriesModal from "../compponet/CategoriesModal";
@@ -18,7 +18,11 @@ import { useTheme } from "../../../context/modContext";
 
 export default function Categories() {
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    setSearchValue(value);
+  };
   const [editData, setEditData] = useState<CategoryType | null>(null);
 
   const { createCotegories, editCategories } = CategoriesService();
@@ -92,6 +96,7 @@ export default function Categories() {
     <ConfigProvider
       theme={{
         token: {
+          controlHeight: 40,
           colorPrimary: "#4EA674",
           borderRadius: 8,
 
@@ -119,7 +124,6 @@ export default function Categories() {
             itemColor: darkMode ? "#D1D5DB" : "#374151",
             itemHoverColor: darkMode ? "#FFFFFF" : "#111827",
             itemSelectedColor: "#FFFFFF",
-            itemActiveColor: "#FFFFFF",
 
             trackBg: darkMode ? "#374151" : "#F3F4F6",
             itemSelectedBg: "#4EA674",
@@ -193,7 +197,16 @@ export default function Categories() {
             {/* ACTIONS */}
 
             <div className="flex gap-2 items-center py-2 px-4">
-              <Search />
+              <Search
+                placeholder="Search..."
+                allowClear
+                className="w-[250px]"
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+                onSearch={onSearch}
+              />
 
               <div
                 className={
@@ -230,7 +243,7 @@ export default function Categories() {
           {/* ================= TABLE ================= */}
 
           <div className="mt-8">
-            <CategoriesTable onEdit={handleEdit} />
+            <CategoriesTable searchValue={searchValue} onEdit={handleEdit} />
           </div>
         </div>
       </div>

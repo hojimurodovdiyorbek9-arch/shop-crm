@@ -23,8 +23,10 @@ const statusLabel: Record<OrderStatus, string> = {
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
 };
-
-export default function ProductTable() {
+interface SearchType {
+  searchValue: string;
+}
+export default function ProductTable({ searchValue }: SearchType) {
   const { isPending, data } = OrderService();
 
   const isDark = useIsDark();
@@ -34,9 +36,26 @@ export default function ProductTable() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const orders: Order[] = data?.data ?? [];
-  const meta = data?.meta;
 
-  const tableData: ProductTableRow[] = orders.map((order, index) => ({
+  const meta = data?.meta;
+  const filterSearch = orders.filter((order) => {
+    const search = searchValue.toLowerCase().trim();
+
+    if (!search) return true;
+
+    const productMatch = order.items.some((item) =>
+      item.productName?.toLowerCase().includes(search),
+    );
+
+    const orderMatch = order.orderNumber?.toLowerCase().includes(search);
+
+    const paymentMatch = order.paymentMethod?.toLowerCase().includes(search);
+
+    const statusMatch = order.status?.toLowerCase().includes(search);
+
+    return productMatch || orderMatch || paymentMatch || statusMatch;
+  });
+  const tableData: ProductTableRow[] = filterSearch.map((order, index) => ({
     key: order.id,
     no: index + 1,
     orderId: order.orderNumber,
@@ -178,7 +197,6 @@ export default function ProductTable() {
 
           Pagination: {
             itemBg: isDark ? "#374151" : "#FFFFFF",
-            itemBgDisabled: isDark ? "#1F2937" : "#F3F4F6",
 
             itemActiveBg: "#4EA674",
             itemLinkBg: isDark ? "#374151" : "#FFFFFF",

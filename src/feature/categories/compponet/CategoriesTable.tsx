@@ -12,9 +12,10 @@ const { darkAlgorithm, defaultAlgorithm } = theme;
 
 interface Props {
   onEdit: (category: CategoryType) => void;
+  searchValue: string;
 }
 
-export default function CategoriesTable({ onEdit }: Props) {
+export default function CategoriesTable({ onEdit, searchValue }: Props) {
   const { isLoading, data, deleteCategory, createCotegories, editCategories } =
     CategoriesService();
 
@@ -23,7 +24,13 @@ export default function CategoriesTable({ onEdit }: Props) {
   const categories: CategoryType[] = Array.isArray(data)
     ? data
     : (data?.data ?? []);
+  console.log(categories);
 
+  const filteredProducts = categories.filter((categorie) => {
+    const search = searchValue.toLowerCase().trim();
+
+    return categorie.name.toLowerCase().includes(search);
+  });
   const columns: TableColumnsType<CategoryType> = [
     {
       title: "No",
@@ -167,7 +174,7 @@ export default function CategoriesTable({ onEdit }: Props) {
             rowSelectedBg: darkMode ? "#243B30" : "#E8F5EE",
             rowSelectedHoverBg: darkMode ? "#2F4A3C" : "#D7EDE0",
           },
-        
+
           Checkbox: {
             colorPrimary: "#4EA674",
             colorPrimaryHover: "#5DBA83",
@@ -177,7 +184,7 @@ export default function CategoriesTable({ onEdit }: Props) {
 
           Pagination: {
             itemBg: darkMode ? "#374151" : "#FFFFFF",
-            
+
             itemActiveBg: "#374151",
             itemLinkBg: darkMode ? "#374151" : "#FFFFFF",
             colorText: darkMode ? "#D1D5DB" : "#374151",
@@ -201,7 +208,7 @@ export default function CategoriesTable({ onEdit }: Props) {
           type: "checkbox",
         }}
         columns={columns}
-        dataSource={categories}
+        dataSource={filteredProducts}
         pagination={{
           pageSize: 5,
           placement: ["bottomCenter"],
