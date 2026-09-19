@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import api from "../pages/api";
 import { message } from "antd";
 
@@ -23,12 +23,6 @@ const useLogin = () => {
     onSuccess: (data) => {
       console.log("Login response:", data);
 
-      // API:
-      // data.success
-      // data.data.id
-      // data.data.firstName
-      // data.data.accessToken
-
       const admin = data.data;
 
       localStorage.setItem("crmAccessToken", admin.accessToken);
@@ -39,11 +33,12 @@ const useLogin = () => {
 
       message.success("Success");
 
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     },
 
     onError: (error) => {
       console.log("Login error:", error);
+
       message.error("Login yoki password noto'g'ri");
     },
   });

@@ -1,7 +1,10 @@
-import { Table, Tag } from "antd";
+import { ConfigProvider, Table, Tag, theme } from "antd";
 import type { TableColumnsType } from "antd";
 import CustomerService from "../service/CustomerServise";
 import type { CustomerType } from "../types/CustomerType";
+import { useIsDark } from "../../hook/UseIsDark";
+
+const { darkAlgorithm, defaultAlgorithm } = theme;
 
 interface Props {
   selectedCustomerId: string | undefined;
@@ -14,7 +17,7 @@ export default function CustomerTable({
 }: Props) {
   const { data, isLoading } = CustomerService(selectedCustomerId);
 
-  console.log(data);
+  const isDark = useIsDark();
 
   const customers: CustomerType[] = Array.isArray(data?.data) ? data.data : [];
 
@@ -24,7 +27,9 @@ export default function CustomerTable({
       dataIndex: "id",
       key: "id",
       render: (id: string) => (
-        <span className="text-[#6A717F]">{id.slice(0, 8)}...</span>
+        <span className="text-[#6A717F] dark:text-[#9CA3AF]">
+          {id.slice(0, 8)}...
+        </span>
       ),
     },
 
@@ -40,11 +45,13 @@ export default function CustomerTable({
           />
 
           <div>
-            <p className="font-medium text-[#111827]">
+            <p className="font-medium text-[#111827] dark:text-white">
               {record.firstName} {record.lastName}
             </p>
 
-            <p className="text-sm text-[#6A717F]">{record.email}</p>
+            <p className="text-sm text-[#6A717F] dark:text-[#9CA3AF]">
+              {record.email}
+            </p>
           </div>
         </div>
       ),
@@ -84,23 +91,88 @@ export default function CustomerTable({
   ];
 
   return (
-    <Table<CustomerType>
-      rowKey={(record) => record.id}
-      loading={isLoading}
-      rowSelection={{
-        type: "checkbox",
-      }}
-      onRow={(record) => ({
-        onClick: () => {
-          onSelectCustomer(record.id);
+    <ConfigProvider
+      theme={{
+        algorithm: isDark ? darkAlgorithm : defaultAlgorithm,
+
+        token: {
+          colorPrimary: "#4EA674",
+          borderRadius: 8,
+
+          colorBgContainer: isDark ? "#1F2937" : "#FFFFFF",
+          colorBgElevated: isDark ? "#1F2937" : "#FFFFFF",
+
+          colorText: isDark ? "#F9FAFB" : "#111827",
+          colorTextSecondary: isDark ? "#9CA3AF" : "#6B7280",
+
+          colorBorder: isDark ? "#374151" : "#E5E7EB",
+          colorBorderSecondary: isDark ? "#374151" : "#E5E7EB",
         },
-        className: "cursor-pointer",
-      })}
-      columns={columns}
-      dataSource={customers}
-      pagination={{
-        pageSize: 6,
+
+        components: {
+          Table: {
+            colorBgContainer: isDark ? "#1F2937" : "#FFFFFF",
+
+            headerBg: isDark ? "#111827" : "#F9FAFB",
+            headerColor: isDark ? "#FFFFFF" : "#111827",
+
+            colorText: isDark ? "#E5E7EB" : "#374151",
+            rowHoverBg: isDark ? "#374151" : "#F3F4F6",
+
+            borderColor: isDark ? "#374151" : "#E5E7EB",
+            colorBorderSecondary: isDark ? "#374151" : "#E5E7EB",
+
+            rowSelectedBg: isDark ? "#243B30" : "#E8F5EE",
+            rowSelectedHoverBg: isDark ? "#2F4A3C" : "#D7EDE0",
+          },
+
+          Checkbox: {
+            colorPrimary: "#4EA674",
+            colorPrimaryHover: "#5DBA83",
+            colorBgContainer: isDark ? "#1F2937" : "#FFFFFF",
+            colorBorder: isDark ? "#6B7280" : "#D1D5DB",
+          },
+
+          Pagination: {
+            itemBg: isDark ? "#374151" : "#FFFFFF",
+            itemBgDisabled: isDark ? "#1F2937" : "#F3F4F6",
+            itemActiveBg: "#4EA674",
+            itemLinkBg: isDark ? "#374151" : "#FFFFFF",
+            colorText: isDark ? "#D1D5DB" : "#374151",
+            colorTextDisabled: isDark ? "#6B7280" : "#9CA3AF",
+            colorPrimary: "#FFFFFF",
+            colorPrimaryHover: "#FFFFFF",
+          },
+
+          Tag: {
+            defaultBg: isDark ? "#374151" : "#F3F4F6",
+            defaultColor: isDark ? "#E5E7EB" : "#374151",
+          },
+
+          Spin: {
+            colorPrimary: "#4EA674",
+          },
+        },
       }}
-    />
+    >
+      <Table<CustomerType>
+        rowKey={(record) => record.id}
+        loading={isLoading}
+        rowSelection={{
+          type: "checkbox",
+        }}
+        onRow={(record) => ({
+          onClick: () => {
+            onSelectCustomer(record.id);
+          },
+          className: "cursor-pointer",
+        })}
+        columns={columns}
+        dataSource={customers}
+        pagination={{
+          pageSize: 6,
+        }}
+      />
+    </ConfigProvider>
   );
 }

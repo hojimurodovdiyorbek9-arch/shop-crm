@@ -34,3 +34,16 @@ export interface CreateCategoryType {
   isActive: boolean;
   sortOrder: number;
 }
+export type EditProductType = {
+  createdAt: string;
+  deletedAt: string | null;
+  description: string;
+  id: string;
+  image: string | null;
+  isActive: boolean;
+  name: string;
+  parentId: string | null;
+  slug: string;
+  sortOrder: number;
+  updatedAt: string;
+};

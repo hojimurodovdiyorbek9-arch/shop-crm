@@ -107,6 +107,7 @@ export interface ProductsResponse {
 // ==========================
 export interface ProductTableRowData {
   key: string;
+  id: string;
   no: number;
   name: string;
   image: string;
@@ -164,4 +165,51 @@ export interface CreateProductInput {
   isPopular: boolean;
   images: CreateProductImageInput[];
   variants: CreateProductVariantInput[];
+}
+export interface ProductImage {
+  url: string;
+  alt: string;
+  isMain: boolean;
+  sortOrder: number;
+}
+
+export interface ProductVariant {
+  sku: string;
+  price: number;
+  stock: number;
+  attributes: {
+    storage?: string;
+    ram?: string;
+    color?: string;
+    [key: string]: string | undefined;
+  };
+  isActive: boolean;
+}
+
+export interface UpdateProductInput {
+  name: string;
+  slug: string;
+  description: string;
+  shortDescription: string;
+  sku: string;
+  barcode: string;
+
+  price: number;
+  oldPrice: number;
+  discountPercent: number;
+
+  stock: number;
+  lowStockThreshold: number;
+
+  brandId: string;
+  categoryId: string;
+
+  isActive: boolean;
+  isFeatured: boolean;
+  isNew: boolean;
+  isPopular: boolean;
+
+  images: ProductImage[];
+
+  variants: ProductVariant[];
 }

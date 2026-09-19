@@ -42,10 +42,17 @@ const OrderService = () => {
           status,
           comment: comment ?? "",
         });
+
         return res.data;
       },
+
       onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: ["order"] });
+        // Orders tableni yangilash
+        queryClient.invalidateQueries({
+          queryKey: ["order"],
+        });
+
+        // Tanlangan order detailni yangilash
         queryClient.invalidateQueries({
           queryKey: ["productDetails", variables.orderId],
         });

@@ -52,8 +52,18 @@ const CategoriesService = () => {
     },
   });
   const editCategories = useMutation({
-    mutationFn: (id: string) => {
-      return api.patch(`/admin/categories/${id}`);
+    mutationKey: ["editCategories"],
+
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: CreateCategoryType;
+    }) => {
+      const res = await api.patch(`/admin/categories/${id}`, data);
+
+      return res.data;
     },
 
     onSuccess: () => {

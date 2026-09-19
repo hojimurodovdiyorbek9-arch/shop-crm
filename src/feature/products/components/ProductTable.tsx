@@ -1,28 +1,61 @@
-import { Table, Tag, Image } from "antd";
+import { ConfigProvider, Table, Tag, Image, theme } from "antd";
 import type { TableColumnsType } from "antd";
 import type { Product, ProductTableRowData } from "../types/ProductTypes";
 import ProductService from "../service/ProductService";
+import { useTheme } from "../../../context/modContext";
+import { useNavigate } from "react-router";
+import { SquarePen, Trash } from "lucide-react";
+import { useState } from "react";
+import EditModal from "./EditModal";
 
-export default function ProductTable() {
-  const { isPending, data } = ProductService();
+const { darkAlgorithm, defaultAlgorithm } = theme;
+interface ProductTableProps {
+  searchValue: string;
+}
+export default function ProductTable({ searchValue }: ProductTableProps) {
+  const navigate = useNavigate();
+  const [editOpen, setEditOpen] = useState(false);
+  const handleEdit = (id: string) => {
+    setSelectedProductId(id);
+    setEditOpen(true);
+  };
+
+  const [selectedProductId, setSelectedProductId] = useState<string>();
+  const { isPending, data, useDeleteProduct } = ProductService();
+  const deleteProduct = useDeleteProduct();
+  const { darkMode } = useTheme();
 
   const products: Product[] = data?.data ?? [];
+  const filteredProducts = products.filter((product) => {
+    const search = searchValue.toLowerCase().trim();
 
-  const tableData: ProductTableRowData[] = products.map((product, index) => ({
-    key: product.id,
-    no: index + 1,
-    name: product.name,
-    image:
-      product.images.find((img) => img.isMain)?.url ??
-      product.images[0]?.url ??
-      "",
-    brand: product.brand?.name ?? "-",
-    category: product.category?.name ?? "-",
-    price: product.price,
-    oldPrice: product.oldPrice,
-    stock: product.availableStock,
-    isActive: product.isActive,
-  }));
+    return (
+      product.name.toLowerCase().includes(search) ||
+      product.brand?.name?.toLowerCase().includes(search) ||
+      product.category?.name?.toLowerCase().includes(search)
+    );
+  });
+
+  const tableData: ProductTableRowData[] = filteredProducts.map(
+    (product, index) => ({
+      key: product.id,
+      id: product.id,
+      no: index + 1,
+      name: product.name,
+
+      image:
+        product.images.find((img) => img.isMain)?.url ??
+        product.images[0]?.url ??
+        "",
+
+      brand: product.brand?.name ?? "-",
+      category: product.category?.name ?? "-",
+      price: product.price,
+      oldPrice: product.oldPrice,
+      stock: product.availableStock,
+      isActive: product.isActive,
+    }),
+  );
 
   const columns: TableColumnsType<ProductTableRowData> = [
     {
@@ -31,10 +64,12 @@ export default function ProductTable() {
       key: "no",
       width: 60,
     },
+
     {
       title: "Rasm",
       dataIndex: "image",
       key: "image",
+
       render: (src: string) => (
         <Image
           src={src}
@@ -45,66 +80,244 @@ export default function ProductTable() {
         />
       ),
     },
+
     {
       title: "Nomi",
       dataIndex: "name",
       key: "name",
-      render: (name: string) => <span className="font-medium">{name}</span>,
+
+      render: (name: string) => (
+        <span
+          className={
+            darkMode ? "font-medium text-white" : "font-medium text-[#111827]"
+          }
+        >
+          {name}
+        </span>
+      ),
     },
+
     {
       title: "Brend",
       dataIndex: "brand",
       key: "brand",
+
+      render: (brand: string) => (
+        <span className={darkMode ? "text-gray-300" : "text-[#374151]"}>
+          {brand}
+        </span>
+      ),
     },
+
     {
       title: "Kategoriya",
       dataIndex: "category",
       key: "category",
+
+      render: (category: string) => (
+        <span className={darkMode ? "text-gray-300" : "text-[#374151]"}>
+          {category}
+        </span>
+      ),
     },
+
     {
       title: "Narx",
       dataIndex: "price",
       key: "price",
+
       render: (price: number, record) => (
         <div className="flex flex-col">
-          <span>{price.toLocaleString("uz-UZ")} so'm</span>
+          <span className={darkMode ? "text-white" : "text-[#111827]"}>
+            {price.toLocaleString("uz-UZ")} so'm
+          </span>
+
           {record.oldPrice && (
-            <span className="text-xs text-gray-400 line-through">
+            <span
+              className={
+                darkMode
+                  ? "text-xs text-gray-500 line-through"
+                  : "text-xs text-gray-400 line-through"
+              }
+            >
               {record.oldPrice.toLocaleString("uz-UZ")} so'm
             </span>
           )}
         </div>
       ),
     },
+
     {
       title: "Ombordagi soni",
       dataIndex: "stock",
       key: "stock",
+
       render: (stock: number) => (
         <Tag color={stock > 0 ? "green" : "red"}>{stock} dona</Tag>
       ),
     },
+
     {
       title: "Holati",
       dataIndex: "isActive",
       key: "isActive",
+
       render: (isActive: boolean) => (
         <Tag color={isActive ? "green" : "default"}>
           {isActive ? "Faol" : "Nofaol"}
         </Tag>
       ),
     },
+
+    {
+      title: "Action",
+      key: "action",
+
+      render: (_, record) => {
+        const deleting =
+          deleteProduct.isPending && deleteProduct.variables === record.id;
+
+        return (
+          <div
+            className="flex items-center gap-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* EDIT */}
+            <button type="button" className="cursor-pointer">
+              <SquarePen
+                size={18}
+                className="cursor-pointer"
+                onClick={() => handleEdit(record.id)}
+              />
+            </button>
+
+            {/* DELETE */}
+            <button
+              type="button"
+              disabled={deleting}
+              onClick={() => deleteProduct.mutate(record.id)}
+              className="cursor-pointer disabled:cursor-not-allowed"
+            >
+              {deleting ? (
+                <span
+                  className={
+                    darkMode
+                      ? "inline-block w-[18px] h-[18px] border-2 border-gray-600 border-t-red-500 rounded-full animate-spin"
+                      : "inline-block w-[18px] h-[18px] border-2 border-gray-300 border-t-red-500 rounded-full animate-spin"
+                  }
+                />
+              ) : (
+                <Trash
+                  size={18}
+                  className={
+                    darkMode
+                      ? "text-gray-400 hover:text-red-500"
+                      : "text-[#6A717F] hover:text-red-500"
+                  }
+                />
+              )}
+            </button>
+          </div>
+        );
+      },
+    },
   ];
 
   return (
-    <div className="mt-8">
-      <Table<ProductTableRowData>
-        columns={columns}
-        dataSource={tableData}
-        loading={isPending}
-        rowKey="key"
-        pagination={{ pageSize: 20 }}
+    <ConfigProvider
+      theme={{
+        algorithm: darkMode ? darkAlgorithm : defaultAlgorithm,
+
+        token: {
+          colorPrimary: "#4EA674",
+          borderRadius: 8,
+
+          colorBgContainer: darkMode ? "#1F2937" : "#FFFFFF",
+
+          colorBgElevated: darkMode ? "#1F2937" : "#FFFFFF",
+
+          colorText: darkMode ? "#F9FAFB" : "#111827",
+
+          colorTextSecondary: darkMode ? "#9CA3AF" : "#6B7280",
+
+          colorBorder: darkMode ? "#374151" : "#E5E7EB",
+
+          colorBorderSecondary: darkMode ? "#374151" : "#E5E7EB",
+        },
+
+        components: {
+          Table: {
+            colorBgContainer: darkMode ? "#1F2937" : "#FFFFFF",
+
+            headerBg: darkMode ? "#111827" : "#F9FAFB",
+
+            headerColor: darkMode ? "#FFFFFF" : "#111827",
+
+            colorText: darkMode ? "#E5E7EB" : "#374151",
+
+            rowHoverBg: darkMode ? "#374151" : "#F3F4F6",
+
+            borderColor: darkMode ? "#374151" : "#E5E7EB",
+
+            colorBorderSecondary: darkMode ? "#374151" : "#E5E7EB",
+          },
+
+          Pagination: {
+            itemBg: darkMode ? "#374151" : "#FFFFFF",
+
+            itemActiveBg: "#4EA674",
+
+            itemLinkBg: darkMode ? "#374151" : "#FFFFFF",
+
+            colorText: darkMode ? "#D1D5DB" : "#374151",
+
+            colorTextDisabled: darkMode ? "#6B7280" : "#9CA3AF",
+
+            colorPrimary: "#FFFFFF",
+            colorPrimaryHover: "#FFFFFF",
+          },
+
+          Tag: {
+            defaultBg: darkMode ? "#374151" : "#F3F4F6",
+
+            defaultColor: darkMode ? "#E5E7EB" : "#374151",
+          },
+
+          Spin: {
+            colorPrimary: "#4EA674",
+          },
+
+          Image: {
+            colorBgMask: darkMode ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.45)",
+          },
+        },
+      }}
+    >
+      <div className="mt-8">
+        <Table<ProductTableRowData>
+          columns={columns}
+          dataSource={tableData}
+          loading={isPending}
+          rowKey="key"
+          pagination={{ pageSize: 20 }}
+          onRow={(record) => ({
+            onClick: () => {
+              navigate(`/products/${record.id}`);
+            },
+            style: {
+              cursor: "pointer",
+            },
+          })}
+        />
+      </div>
+      <EditModal
+        open={editOpen}
+        productId={selectedProductId}
+        onClose={() => {
+          setEditOpen(false);
+          setSelectedProductId(undefined);
+        }}
       />
-    </div>
+    </ConfigProvider>
   );
 }

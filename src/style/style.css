@@ -1,9 +1,10 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-body{
-    font-family: 'Lato', sans-serif;
-    color:inherit;
+body {
+  font-family: "Lato", sans-serif;
+  color: inherit;
 }
+
 .dark-search .ant-input,
 .dark-search .ant-input-affix-wrapper {
   background-color: #111827 !important;
@@ -60,12 +61,183 @@ body{
 .login-animation {
   animation: loginEnter 1.2s ease-out;
 }
-.lamp{
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+
+.dark .ant-table-thead > tr > th {
+  background: #111827 !important;
+  color: #f9fafb !important;
 }
-.lamp-b{
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+.dark .ant-picker-input input::placeholder {
+  color: #9ca3af !important;
 }
-.shape-1{
-  border-radius:  50% 50% 0 0 /  100% 100% 0 0;
+.dark .ant-picker-suffix {
+  color: #9ca3af !important;
+}
+.dark .ant-select {
+  background: #1f2937 !important;
+}
+
+.dark .ant-select-selector {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+.dark .ant-select-selection-item {
+  color: #f9fafb !important;
+}
+
+.dark .ant-select-arrow {
+  color: #9ca3af !important;
+}
+
+.dark .ant-select:hover .ant-select-selector {
+  border-color: #4ea674 !important;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.custom-table .ant-table-body {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.custom-table .ant-table-body::-webkit-scrollbar {
+  width: 0 !important;
+  display: none !important;
+}
+/* =========================
+   FLOATING PRODUCTS
+========================= */
+
+.floating-phone-1 {
+  animation: floatPhone1 6s ease-in-out infinite;
+}
+
+@keyframes floatPhone1 {
+  0% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+
+  25% {
+    transform: translate(15px, 20px) rotate(-3deg);
+  }
+
+  50% {
+    transform: translate(5px, 35px) rotate(4deg);
+  }
+
+  75% {
+    transform: translate(-15px, 15px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+}
+
+/* =========================
+   PHONE 2
+========================= */
+
+.floating-phone-2 {
+  animation: floatPhone2 7s ease-in-out infinite;
+}
+
+@keyframes floatPhone2 {
+  0% {
+    transform: translate(0, 0) rotate(8deg);
+  }
+
+  25% {
+    transform: translate(-20px, 15px) rotate(3deg);
+  }
+
+  50% {
+    transform: translate(-5px, 35px) rotate(-4deg);
+  }
+
+  75% {
+    transform: translate(15px, 10px) rotate(2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(8deg);
+  }
+}
+
+/* =========================
+   LAPTOP 1
+========================= */
+
+.floating-laptop-1 {
+  animation: floatLaptop1 8s ease-in-out infinite;
+}
+
+@keyframes floatLaptop1 {
+  0% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+
+  50% {
+    transform: translate(20px, -25px) rotate(2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+}
+
+/* =========================
+   LAPTOP 2
+========================= */
+
+.floating-laptop-2 {
+  animation: floatLaptop2 7s ease-in-out infinite;
+}
+
+@keyframes floatLaptop2 {
+  0% {
+    transform: translate(0, 0) rotate(4deg);
+  }
+
+  50% {
+    transform: translate(-20px, -20px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(4deg);
+  }
+}
+
+/* =========================
+   LOGIN CARD
+========================= */
+
+.login-animation {
+  animation: loginAppear 1s cubic-bezier(0.17, 0.67, 0.35, 1.3);
+}
+
+@keyframes loginAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.95);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.01);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

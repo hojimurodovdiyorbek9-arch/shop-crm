@@ -8,6 +8,9 @@ import Lauyot from "./components/lauyot/Lauyot";
 import Login from "./feature/auth/pages/Login";
 import Profile from "./feature/profile/pages/Profile";
 import Products from "./feature/products/pages/Products";
+import AddProduct from "./feature/addProduct/pages/AddProduct";
+import ProductDetails from "./feature/products/components/ProductDetails";
+import Brand from "./feature/brands/pages/Brand";
 
 export default function App() {
   return (
@@ -19,10 +22,13 @@ export default function App() {
           <Route path="/categories" element={<Categories />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/brands" element={<Brand />} />
           <Route path="/orderManagment" element={<OrderManagment />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/addproducts" element={<AddProduct />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
         </Route>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
